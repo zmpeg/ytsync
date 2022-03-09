@@ -1,0 +1,15 @@
+#!/bin/sh
+
+cd $1
+pwd
+
+# Rename downloaded files so plex can scan them
+ls | grep -E '^[0-9]{8}' > to_rename
+while read i; do
+	new_name=$(echo $i | awk -F~ '{print substr($1,1,4) "-" substr($1,5,2) "-" substr($1,7)}')
+	echo "Renaming $i to $new_name"
+	mv "$i" "$new_name"
+done < to_rename
+rm to_rename
+
+cd -
